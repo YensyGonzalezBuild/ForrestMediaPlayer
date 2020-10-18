@@ -19,6 +19,7 @@ import co.edu.unbosque.model.persistance.ShowManager;
 import co.edu.unbosque.model.persistance.SongManager;
 import co.edu.unbosque.view.AddSongModal;
 import co.edu.unbosque.view.CreateShowModal;
+import co.edu.unbosque.view.PreferrencesModal;
 import co.edu.unbosque.view.ShowProgramsModal;
 import co.edu.unbosque.view.View;
 
@@ -37,6 +38,8 @@ public class Controller implements ActionListener, MouseListener {
 	private CreateShowModal createShowModal;
 	
 	private DjManager djManager;
+	
+	private PreferrencesModal preferrencesModal;
 
 	private boolean play;
 
@@ -47,8 +50,12 @@ public class Controller implements ActionListener, MouseListener {
 	private File cancion;
 	
 	private String FileRoute;
+	
+	private String PlaybackType;
 
 	public Controller() {
+		
+		this.PlaybackType = "Streaming";
 		
 		this.FileRoute = "../ForrestM/src/data";
 		
@@ -66,6 +73,14 @@ public class Controller implements ActionListener, MouseListener {
 
 		this.programsModal.setVisible(true);
 
+	}
+	
+	public String getPlaybackType() {
+		return this.PlaybackType;
+	}
+	
+	public void setPlaybackType(String playback) {
+		this.PlaybackType = playback;
 	}
 
 	// METODO PARA REPRODUCIR LA CANCION ACTUAL Y REGRESAR A MOSTRAR LAS LISTAS
@@ -148,7 +163,37 @@ public class Controller implements ActionListener, MouseListener {
 		String ActionName = e.getComponent().getName();
 
 		switch (ActionName) {
+		
+		case "SetStreamingPlayback":
 
+			this.setPlaybackType("Streaming");
+			
+			this.mainUI.refreshPlaybackType("Streaming");
+			
+			this.preferrencesModal.setVisible(false);
+
+			break;
+			
+		case "SetAmPlayback":
+
+			this.setPlaybackType("AM");
+			
+			this.mainUI.refreshPlaybackType("AM Radio");
+			
+			this.preferrencesModal.setVisible(false);
+
+			break;
+			
+		case "SetFmPlayback":
+
+			this.setPlaybackType("FM");
+			
+			this.mainUI.refreshPlaybackType("FM Radio");
+			
+			this.preferrencesModal.setVisible(false);
+
+			break;
+			
 		case "openCreateSongModal":
 
 			this.songModal.setVisible(true);
@@ -339,6 +384,16 @@ public class Controller implements ActionListener, MouseListener {
 			this.djManager.createDj(Name);
 			
 			this.createShowModal.updateDjs(Name);
+			
+			break;
+			
+		case "openPreferrences" : 
+			
+			this.preferrencesModal = new PreferrencesModal(this);
+			
+			this.preferrencesModal.setVisible(true);
+			
+			
 			
 			break;
 			

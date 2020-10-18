@@ -37,6 +37,8 @@ public class View extends JFrame {
 	private JLabel Genre;
 
 	private JLabel Time;
+	
+	private JLabel Type;
 
 	private SongManager songManager;
 
@@ -232,6 +234,10 @@ public class View extends JFrame {
 		this.songCuePane.revalidate();
 	}
 
+	public void refreshPlaybackType(String type) {
+		this.Type.setText(type);
+	}
+	
 	private void render() {
 
 		// -- top bar
@@ -308,7 +314,7 @@ public class View extends JFrame {
 
 		this.Time = new JLabel(this.activeProgram.getStartTime() + " - " + this.activeProgram.getEndTime());
 
-		JLabel Type = new JLabel("Streaming");
+		this.Type = new JLabel(this.controller.getPlaybackType());
 
 		JButton Program = new JButton("Program Select");
 		
@@ -317,6 +323,10 @@ public class View extends JFrame {
 		Program.addMouseListener(controller);
 
 		JButton Config = new JButton("Preferences");
+		
+		Config.setName("openPreferrences");
+		
+		Config.addMouseListener(controller);
 
 		Config.setMaximumSize(new Dimension(65, 65));
 
