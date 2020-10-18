@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import co.edu.unbosque.model.Song;
+import co.edu.unbosque.model.persistance.DjManager;
 import co.edu.unbosque.model.persistance.ShowManager;
 import co.edu.unbosque.model.persistance.SongManager;
 import co.edu.unbosque.view.AddSongModal;
+import co.edu.unbosque.view.CreateShowModal;
 import co.edu.unbosque.view.ShowProgramsModal;
 import co.edu.unbosque.view.View;
 
@@ -30,6 +33,10 @@ public class Controller implements ActionListener, MouseListener {
 	private SongManager songManager;
 
 	private ShowManager showManager;
+	
+	private CreateShowModal createShowModal;
+	
+	private DjManager djManager;
 
 	private boolean play;
 
@@ -38,18 +45,26 @@ public class Controller implements ActionListener, MouseListener {
 	javazoom.jl.player.Player player;
 
 	private File cancion;
+	
+	private String FileRoute;
 
 	public Controller() {
+		
+		this.FileRoute = "../ForrestM/src/data";
+		
+		this.createShowModal =  new CreateShowModal(this);
 
-		this.showManager = new ShowManager("../ForrestM/src/data");
+		this.showManager = new ShowManager(this.FileRoute);
+
+		this.songManager = new SongManager(this.FileRoute);
+		
+		this.djManager = new DjManager(this.FileRoute);
+
+		this.songModal = new AddSongModal(this);
 
 		this.programsModal = new ShowProgramsModal(this);
 
 		this.programsModal.setVisible(true);
-
-		this.songManager = new SongManager("../ForrestM/src/data");
-
-		this.songModal = new AddSongModal(this);
 
 	}
 
@@ -300,6 +315,34 @@ public class Controller implements ActionListener, MouseListener {
 			this.programsModal.setVisible(false);
 
 			break;
+			
+		case "openCreateProgram":
+			
+			this.createShowModal.setVisible(true);
+			
+			break;
+			
+		case "createProgram":
+			
+			this.showManager.createShow(this.createShowModal.getValues());
+			
+			this.programsModal.refreshProgramList();
+			
+			this.createShowModal.setVisible(false);
+			
+			break;
+			
+		case "createDj":
+			
+			String Name = JOptionPane.showInputDialog("Enter the new Dj's name");
+			
+			this.djManager.createDj(Name);
+			
+			this.createShowModal.updateDjs(Name);
+			
+			break;
+			
+			
 
 		default:
 

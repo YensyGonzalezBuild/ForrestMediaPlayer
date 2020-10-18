@@ -26,9 +26,12 @@ public class ShowManager {
 		this.FileRoute = "/Shows.txt";
 	}
 
-	public boolean createShow() {
+	public boolean createShow(String[] values) {
+		
+		String entry = UUID.randomUUID() + ";" + values[0]+ ";" + values[1] + ";" + values[2] + ";"
+				+ values[3] + ";"+ values[4] + ";";
 
-		return true;
+		return this.Manager.addFileEntry(entry, this.FileRoute);
 	}
 	
 	public Show getShowById(UUID id) {

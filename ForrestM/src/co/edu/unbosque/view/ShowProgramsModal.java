@@ -118,6 +118,8 @@ public class ShowProgramsModal extends JFrame {
 
 		JButton addNewButton = new JButton("Create New Program");
 		
+		addNewButton.setName("openCreateProgram");
+		
 		addNewButton.addMouseListener(this.controller);
 
 		JButton selectButton = new JButton("Select Program");
