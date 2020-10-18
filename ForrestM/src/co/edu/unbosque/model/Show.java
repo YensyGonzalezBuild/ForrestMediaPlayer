@@ -14,17 +14,20 @@ public class Show {
 	
 	private String EndTime;
 	
+	private String Dj;
+	
 	
 	public Show () {
 		
 	}
 
-	public Show(UUID id, String name, String genre, String startTime, String endTime) {
+	public Show(UUID id, String name, String genre, String startTime, String endTime, String dj) {
 		this.id = id;
 		this.Name = name;
 		this.Genre = genre;
 		this.StartTime = startTime;
 		this.EndTime = endTime;
+		this.Dj = dj;
 	}
 
 	public UUID getId() {
@@ -41,6 +44,14 @@ public class Show {
 
 	public void setName(String name) {
 		this.Name = name;
+	}
+
+	public String getDj() {
+		return Dj;
+	}
+
+	public void setDj(String dj) {
+		Dj = dj;
 	}
 
 	public String getGenre() {

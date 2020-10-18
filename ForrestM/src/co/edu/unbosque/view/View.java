@@ -32,17 +32,25 @@ public class View extends JFrame {
 
 	private JPanel songCuePane;
 
+	private JLabel Title;
+
+	private JLabel Genre;
+
+	private JLabel Time;
+
 	private SongManager songManager;
 
 	private ArrayList<Song> songCue;
-	
+
 	private Show activeProgram;
 
 	// -- Constructor
 
-	public View(Controller control) {
+	public View(Controller control, Show initialProgram) {
 
 		this.controller = control;
+
+		this.activeProgram = initialProgram;
 
 		this.songCue = new ArrayList<Song>();
 
@@ -76,11 +84,34 @@ public class View extends JFrame {
 		return this.selectedCueSong;
 	}
 
-	public void setSongCue(ArrayList<Song> Songs){
+	public Show getActiveProgram() {
+		return activeProgram;
+	}
+
+	public void setActiveProgram(Show activeProgram) {
+		this.activeProgram = activeProgram;
+
+		this.Title.setText(activeProgram.getName());
+
+		this.Genre.setText(activeProgram.getGenre());
+
+		this.Time.setText(activeProgram.getStartTime() + " - " + activeProgram.getEndTime());
+		
+		this.selectedListSong = UUID.randomUUID();
+		
+		this.refreshSongList();
+		
+		this.songCue.clear();
+		
+		this.refreshSongCue();
+
+	}
+
+	public void setSongCue(ArrayList<Song> Songs) {
 		this.songCue = Songs;
 	}
-	
-	public ArrayList<Song> getSongCue(){
+
+	public ArrayList<Song> getSongCue() {
 		return this.songCue;
 	}
 
@@ -271,16 +302,20 @@ public class View extends JFrame {
 
 		panel.setLayout(new GridLayout(1, 6));
 
-		JLabel Title = new JLabel(this.activeProgram.getName());
+		this.Title = new JLabel(this.activeProgram.getName());
 
-		JLabel Genre = new JLabel(this.activeProgram.getGenre());
+		this.Genre = new JLabel(this.activeProgram.getGenre());
 
-		JLabel Time = new JLabel(this.activeProgram.getStartTime()+" - "+this.activeProgram.getEndTime());
+		this.Time = new JLabel(this.activeProgram.getStartTime() + " - " + this.activeProgram.getEndTime());
 
 		JLabel Type = new JLabel("Streaming");
 
 		JButton Program = new JButton("Program Select");
 		
+		Program.setName("openProgramSelector");
+		
+		Program.addMouseListener(controller);
+
 		JButton Config = new JButton("Preferences");
 
 		Config.setMaximumSize(new Dimension(65, 65));
@@ -292,6 +327,8 @@ public class View extends JFrame {
 		panel.add(Time);
 
 		panel.add(Type);
+
+		panel.add(Program);
 
 		panel.add(Config);
 
@@ -401,7 +438,7 @@ public class View extends JFrame {
 
 		listContainer.setLayout(new BoxLayout(listContainer, BoxLayout.PAGE_AXIS));
 
-		ArrayList<Song> Songs = this.songManager.listSongs("Rock");
+		ArrayList<Song> Songs = this.songManager.listSongs(this.activeProgram.getGenre());
 
 		Songs.forEach((Song) -> {
 			listContainer.add(SongCard(Song));
@@ -480,19 +517,19 @@ public class View extends JFrame {
 		JButton playButton = new JButton("Play");
 
 		playButton.setName("playSongCue");
-		
+
 		playButton.addMouseListener(this.controller);
-		
+
 		JButton stopButton = new JButton("Stop");
 
 		stopButton.setName("stopSongCue");
-		
+
 		stopButton.addMouseListener(this.controller);
 
 		JButton skipButton = new JButton("Skip");
 
 		skipButton.setName("skipSongInCue");
-		
+
 		skipButton.addMouseListener(this.controller);
 
 		// -- Song List
@@ -609,6 +646,8 @@ public class View extends JFrame {
 
 				Time.setForeground(fontColor);
 
+				card.addMouseListener(controller);
+
 			} else {
 
 				background = this.constants.getGray();
@@ -644,8 +683,6 @@ public class View extends JFrame {
 		// -----------------------------------------------------------------
 
 		card.setName("List:" + song.getId().toString());
-
-		card.addMouseListener(controller);
 
 		card.add(Title);
 

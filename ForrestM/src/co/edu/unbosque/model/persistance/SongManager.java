@@ -67,7 +67,7 @@ public class SongManager {
 
 		String line = "";
 
-		File f = new File(this.MainRoute + "/Songs.txt");
+		File f = new File(this.MainRoute + this.FileRoute);
 
 		try {
 
